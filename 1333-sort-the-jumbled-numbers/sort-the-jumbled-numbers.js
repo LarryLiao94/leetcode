@@ -4,16 +4,22 @@
  * @return {number[]}
  */
 var sortJumbled = function(mapping, nums) {
-     const obj = {};
-    const jubmledValue = (val) => {
-        if (obj[val]) return +obj[val];
-        let res = '';
-        let stVal = val + '';
-        for (let v of stVal) {
-            res += mapping[+v];
+   const translateInteger = (num) => {
+        let digits = num.toString().split('');
+        for (let i = 0; i < digits.length; i++) {
+            digits[i] = mapping[digits[i]];
         }
-        obj[val] = res;
-        return +res;
+        return parseInt(digits.join(''));
+    };
+
+    const numberMapping = {};
+    for (let num of nums) {
+        if (!(num in numberMapping)) {
+            numberMapping[num] = translateInteger(num);
+        }
     }
-    return nums.sort((a, b) => jubmledValue(a) - jubmledValue(b));
+
+    nums.sort((a, b) => numberMapping[a] - numberMapping[b]);
+
+    return nums;
 };
